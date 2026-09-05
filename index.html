@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Settle.AI — Transaction Intelligence</title>
+
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+/* =========================================================
+   SETTLE.AI — COMPLETE STYLES
+========================================================= */
+
+:root {
+    --black: #04110e;
+    --black-2: #071915;
+    --navy: #071a33;
+    --navy-2: #0d2945;
+    --emerald: #00b887;
+    --emerald-2: #00d39b;
+    --emerald-dark: #007c61;
+    --mint: #b8f7e3;
+    --mint-soft: #e9fbf5;
+    --white: #ffffff;
+    --off-white: #f5f8f6;
+    --text: #0b1714;
+    --muted: #71807b;
+    --line: #dce8e3;
+    --warning: #f5ad32;
+    --danger: #ff5c61;
+    --ease: cubic-bezier(.2,.8,.2,1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--off-white);
+    color: var(--text);
+    overflow-x: hidden;
+}
+
+button, input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+/* =========================================================
+   BACKGROUND
+========================================================= */
+
+.grid-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: 
+        linear-gradient(rgba(0,184,135,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,184,135,.035) 1px, transparent 1px);
+    background-size: 55px 55px;
+    z-index: -2;
+}
+
+.noise {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: .035;
+    z-index: 1000;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E");
+}
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 78px;
+    padding: 0 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 500;
+    background: rgba(245,248,246,.72);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0,0,0,.05);
+    transition: .4s var(--ease);
+}
+
+.nav.scrolled {
+    background: rgba(255,255,255,.9);
+    height: 68px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    font-size: 19px;
+    font-weight: 850;
+    letter-spacing: -.7px;
+    cursor: pointer;
+}
+
+.logo-mark {
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    background: var(--black);
+    color: var(--mint);
+    border-radius: 11px;
+    font-size: 19px;
+    box-shadow: 0 0 0 5px rgba(0,184,135,.08);
+}
+
+.logo span {
+    color: var(--emerald-dark);
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.nav-link {
+    color: #66756f;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .8px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: .2s;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+.nav-link:hover {
+    color: var(--emerald-dark);
+    background: rgba(0,184,135,.06);
+}
+
+.nav-link.active {
+    color: var(--emerald-dark);
+    background: rgba(0,184,135,.1);
+}
+
+.nav-link i {
+    margin-right: 6px;
+}
+
+/* =========================================================
+   PAGE SYSTEM
+========================================================= */
+
+.page {
+    display: none;
+    min-height: 100vh;
+    padding-top: 100px;
+    animation: fadeSlide .4s ease-out;
+}
+
+.page.active {
+    display: block;
+}
+
+@keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.page-header {
+    max-width: 1280px;
+    margin: 0 auto 40px;
+    padding: 0 5%;
+}
+
+.page-header h1 {
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 800;
+    letter-spacing: -2px;
+}
+
+.page-header h1 span {
+    color: var(--emerald);
+}
+
+.page-header p {
+    color: var(--muted);
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+/* =========================================================
+   HERO / DASHBOARD
+========================================================= */
+
+.hero {
+    min-height: 100vh;
+    padding: 150px 6% 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-copy {
+    position: relative;
+    z-index: 5;
+    max-width: 760px;
+}
+
+.eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    color: var(--emerald-dark);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+.eyebrow-line {
+    width: 32px;
+    height: 2px;
+    background: var(--emerald);
+}
+
+.hero h1 {
+    font-size: clamp(55px, 7.2vw, 105px);
+    line-height: .88;
+    letter-spacing: -6px;
+    font-weight: 850;
+}
+
+.hero h1 .green {
+    color: var(--emerald);
+}
+
+.hero-description {
+    max-width: 590px;
+    margin-top: 30px;
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.search {
+    max-width: 640px;
+    margin-top: 38px;
+    padding: 7px;
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 17px;
+    box-shadow: 0 20px 60px rgba(6,25,18,.08);
+    transition: .3s var(--ease);
+}
+
+.search:focus-within {
+    border-color: var(--emerald);
+    box-shadow: 0 0 0 5px rgba(0,184,135,.09), 0 25px 70px rgba(6,25,18,.1);
+}
+
+.search-icon {
+    padding: 0 15px;
+    color: var(--muted);
+    font-size: 20px;
+}
+
+.search input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--text);
+    font-size: 14px;
+}
+
+.trace {
+    border: 0;
+    padding: 15px 23px;
+    border-radius: 12px;
+    background: var(--black);
+    color: white;
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: .4px;
+    transition: .25s var(--ease);
+}
+
+.trace:hover {
+    background: var(--emerald-dark);
+    transform: translateY(-2px);
+}
+
+/* =========================================================
+   3D UNIVERSE
+========================================================= */
+
+.universe-wrapper {
+    position: relative;
+    height: 600px;
+    perspective: 1300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.universe {
+    width: 530px;
+    height: 530px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform .25s var(--ease);
+    transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) scale(var(--zoom, 1));
+}
+
+.orbit {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    border: 1px solid rgba(0,184,135,.17);
+    border-radius: 50%;
+    transform-style: preserve-3d;
+}
+
+.orbit.one {
+    width: 460px;
+    height: 460px;
+    transform: translate(-50%,-50%) rotateX(67deg);
+}
+
+.orbit.two {
+    width: 350px;
+    height: 350px;
+    transform: translate(-50%,-50%) rotateY(70deg);
+}
+
+.orbit.three {
+    width: 260px;
+    height: 260px;
+    transform: translate(-50%,-50%) rotateX(55deg) rotateY(45deg);
+}
+
+.orbit::after {
+    content: "";
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--emerald-2);
+    box-shadow: 0 0 18px var(--emerald);
+    top: 10%;
+    left: 50%;
+}
+
+.core {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 190px;
+    height: 190px;
+    transform: translate(-50%,-50%) translateZ(80px);
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 25%, #163e36, #06130f 65%);
+    border: 1px solid rgba(184,247,227,.25);
+    box-shadow: 0 0 80px rgba(0,184,135,.15), inset 0 0 50px rgba(0,211,155,.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+    z-index: 10;
+}
+
+.core::before {
+    content: "";
+    position: absolute;
+    inset: -14px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,211,155,.22);
+    animation: corePulse 3s infinite;
+}
+
+@keyframes corePulse {
+    0%,100% { transform: scale(1); opacity: .7; }
+    50% { transform: scale(1.08); opacity: .15; }
+}
+
+.core-label {
+    color: var(--mint);
+    font-size: 9px;
+    letter-spacing: 2px;
+    font-weight: 850;
+}
+
+.core-amount {
+    margin-top: 8px;
+    font-size: 39px;
+    font-weight: 800;
+    letter-spacing: -2px;
+}
+
+.core-id {
+    margin-top: 6px;
+    color: rgba(255,255,255,.43);
+    font-family: monospace;
+    font-size: 9px;
+}
+
+/* =========================================================
+   NETWORK NODES
+========================================================= */
+
+.node {
+    position: absolute;
+    width: 105px;
+    height: 105px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border-radius: 26px;
+    background: rgba(7,26,51,.94);
+    border: 1px solid rgba(184,247,227,.14);
+    color: white;
+    box-shadow: 0 25px 60px rgba(4,17,14,.16);
+    backdrop-filter: blur(10px);
+    transform-style: preserve-3d;
+    cursor: pointer;
+    transition: transform .35s var(--ease), border .25s;
+    z-index: 20;
+}
+
+.node:hover {
+    border-color: var(--emerald-2);
+    transform: translateZ(30px) scale(1.08);
+}
+
+.node-icon { font-size: 23px; }
+.node-name { font-size: 10px; font-weight: 850; letter-spacing: .5px; }
+.node-state { display: flex; align-items: center; gap: 5px; color: var(--mint); font-size: 8px; }
+.node-state.warning { color: var(--warning); }
+.node-state.error { color: var(--danger); }
+
+.node-gateway { left: 4%; top: 31%; transform: translateZ(35px); }
+.node-bank { right: 1%; top: 20%; transform: translateZ(100px); }
+.node-ledger { right: 9%; bottom: 14%; transform: translateZ(55px); }
+.node-risk { left: 10%; bottom: 9%; transform: translateZ(20px); }
+
+/* =========================================================
+   CONNECTIONS
+========================================================= */
+
+.connection {
+    position: absolute;
+    height: 2px;
+    transform-origin: left center;
+    background: linear-gradient(90deg, transparent, var(--emerald), transparent);
+    opacity: .6;
+    z-index: 2;
+}
+
+.connection::after {
+    content: "";
+    position: absolute;
+    width: 35px;
+    height: 4px;
+    border-radius: 10px;
+    background: var(--mint);
+    box-shadow: 0 0 16px var(--emerald);
+    animation: dataFlow 2.2s linear infinite;
+}
+
+@keyframes dataFlow {
+    0% { left: -20px; }
+    100% { left: 100%; }
+}
+
+.connection.a { width: 220px; left: 23%; top: 39%; transform: rotate(-10deg); }
+.connection.b { width: 205px; left: 52%; top: 37%; transform: rotate(24deg); }
+.connection.c { width: 190px; left: 52%; top: 60%; transform: rotate(48deg); }
+.connection.d { width: 220px; left: 25%; top: 64%; transform: rotate(-25deg); }
+
+/* =========================================================
+   FLOATING LABELS
+========================================================= */
+
+.floating-label {
+    position: absolute;
+    padding: 10px 13px;
+    border-radius: 10px;
+    background: rgba(255,255,255,.82);
+    border: 1px solid var(--line);
+    box-shadow: 0 15px 40px rgba(4,17,14,.08);
+    font-size: 9px;
+    font-weight: 800;
+    color: var(--muted);
+    backdrop-filter: blur(10px);
+    z-index: 50;
+}
+
+.floating-label.one { top: 13%; right: 7%; }
+.floating-label.two { bottom: 12%; left: 2%; }
+.floating-label strong { display: block; color: var(--emerald-dark); font-size: 12px; margin-top: 3px; }
+
+.scroll-hint {
+    position: absolute;
+    left: 6%;
+    bottom: 35px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    color: var(--muted);
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    font-weight: 850;
+}
+
+.scroll-line { width: 40px; height: 1px; background: var(--emerald); }
+
+/* =========================================================
+   STORY SECTION (KEPT ON HOMEPAGE)
+========================================================= */
+
+.story {
+    min-height: 100vh;
+    padding: 150px 7%;
+    background: var(--black);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.story::before {
+    content: "";
+    position: absolute;
+    width: 700px;
+    height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,184,135,.13), transparent 65%);
+    right: -200px;
+    top: -200px;
+}
+
+.story-top { max-width: 900px; position: relative; z-index: 3; }
+.story-tag { color: var(--mint); font-size: 10px; font-weight: 900; letter-spacing: 2px; margin-bottom: 24px; }
+.story h2 { font-size: clamp(48px, 7vw, 95px); line-height: .9; letter-spacing: -5px; }
+.story h2 span { color: var(--emerald-2); }
+.story-description { max-width: 600px; margin-top: 30px; color: rgba(255,255,255,.48); font-size: 15px; line-height: 1.7; }
+
+/* =========================================================
+   EXPLAIN SECTION (KEPT ON HOMEPAGE)
+========================================================= */
+
+.explain {
+    min-height: 100vh;
+    padding: 150px 7%;
+    background: var(--off-white);
+}
+
+.explain-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 30px;
+}
+
+.explain-header h2 {
+    max-width: 800px;
+    font-size: clamp(45px, 6vw, 80px);
+    line-height: .92;
+    letter-spacing: -4px;
+}
+
+.explain-header h2 span { color: var(--emerald); }
+.explain-header p { max-width: 300px; color: var(--muted); font-size: 12px; line-height: 1.7; }
+
+/* =========================================================
+   EVIDENCE CARDS (KEPT ON HOMEPAGE)
+========================================================= */
+
+.evidence-grid {
+    margin-top: 80px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.evidence-card {
+    min-height: 300px;
+    padding: 30px;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 25px;
+    position: relative;
+    overflow: hidden;
+    transition: transform .4s var(--ease), box-shadow .4s;
+}
+
+.evidence-card:hover {
+    transform: translateY(-10px) rotateX(2deg);
+    box-shadow: 0 30px 60px rgba(4,17,14,.1);
+}
+
+.evidence-number { color: var(--emerald); font-family: monospace; font-size: 10px; font-weight: 900; }
+.evidence-card h3 { margin-top: 45px; font-size: 24px; letter-spacing: -.7px; }
+.evidence-card p { margin-top: 15px; color: var(--muted); font-size: 12px; line-height: 1.7; }
+.evidence-visual {
+    position: absolute;
+    right: -30px;
+    bottom: -30px;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,184,135,.18), transparent 65%);
+}
+
+/* =========================================================
+   FINAL CTA (KEPT ON HOMEPAGE)
+========================================================= */
+
+.final {
+    min-height: 75vh;
+    background: var(--black);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 100px 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.final-glow {
+    position: absolute;
+    width: 700px;
+    height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,184,135,.18), transparent 65%);
+    filter: blur(10px);
+}
+
+.final-content { position: relative; z-index: 2; }
+.final-small { color: var(--mint); font-size: 10px; font-weight: 900; letter-spacing: 2px; }
+.final h2 { margin-top: 20px; font-size: clamp(55px, 8vw, 105px); line-height: .85; letter-spacing: -6px; }
+.final h2 span { color: var(--emerald-2); }
+.final-button {
+    margin-top: 40px;
+    border: 0;
+    padding: 17px 25px;
+    border-radius: 13px;
+    background: var(--emerald);
+    color: white;
+    font-size: 11px;
+    font-weight: 900;
+    transition: .3s;
+}
+
+.final-button:hover {
+    background: var(--emerald-2);
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 15px 40px rgba(0,184,135,.2);
+}
+
+.footer {
+    background: var(--black);
+    border-top: 1px solid rgba(255,255,255,.06);
+    padding: 30px 6%;
+    display: flex;
+    justify-content: space-between;
+    color: rgba(255,255,255,.3);
+    font-size: 9px;
+    letter-spacing: .6px;
+}
+
+/* =========================================================
+   INVESTIGATION PAGE
+========================================================= */
+
+.investigation-page {
+    background: var(--off-white);
+    min-height: 100vh;
+    padding: 120px 5% 60px;
+}
+
+.investigation-grid {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.investigation-card {
+    background: white;
+    border-radius: 24px;
+    padding: 30px;
+    border: 1px solid var(--line);
+    box-shadow: 0 4px 20px rgba(0,0,0,.04);
+}
+
+.investigation-card h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.investigation-card h2 .badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 12px;
+    border-radius: 20px;
+    background: var(--mint-soft);
+    color: var(--emerald-dark);
+}
+
+.search-large {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.search-large input {
+    flex: 1;
+    padding: 14px 18px;
+    border: 2px solid var(--line);
+    border-radius: 14px;
+    font-size: 15px;
+    outline: none;
+    transition: .2s;
+    background: var(--off-white);
+}
+
+.search-large input:focus {
+    border-color: var(--emerald);
+    box-shadow: 0 0 0 4px rgba(0,184,135,.08);
+}
+
+.search-large button {
+    padding: 14px 28px;
+    background: var(--black);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 13px;
+    transition: .2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-large button:hover {
+    background: var(--emerald-dark);
+    transform: translateY(-2px);
+}
+
+/* =========================================================
+   TRANSACTION FLOW
+========================================================= */
+
+.flow-diagram {
+    margin: 20px 0;
+    padding: 20px;
+    background: var(--off-white);
+    border-radius: 16px;
+}
+
+.flow-step {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    background: white;
+    border-radius: 12px;
+    border-left: 4px solid var(--emerald);
+    transition: .2s;
+}
+
+.flow-step:hover {
+    transform: translateX(6px);
+}
+
+.flow-step .step-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    font-size: 14px;
+    margin-right: 14px;
+}
+
+.flow-step .step-icon.green { background: rgba(0,184,135,.12); color: var(--emerald); }
+.flow-step .step-icon.yellow { background: rgba(245,173,50,.12); color: var(--warning); }
+.flow-step .step-icon.red { background: rgba(255,92,97,.12); color: var(--danger); }
+
+.flow-step .step-info { flex: 1; }
+.flow-step .step-info .name { font-weight: 600; font-size: 14px; }
+.flow-step .step-info .desc { font-size: 12px; color: var(--muted); }
+.flow-step .step-status { font-size: 12px; font-weight: 600; }
+.flow-step .step-status.success { color: var(--emerald); }
+.flow-step .step-status.warning { color: var(--warning); }
+.flow-step .step-status.error { color: var(--danger); }
+
+.flow-arrow-line {
+    text-align: center;
+    color: var(--muted);
+    font-size: 20px;
+    padding: 4px 0;
+}
+
+/* =========================================================
+   HISTORY PAGE
+========================================================= */
+
+.history-page {
+    background: var(--off-white);
+    min-height: 100vh;
+    padding: 120px 5% 60px;
+}
+
+.history-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    max-width: 1280px;
+    margin: 0 auto 30px;
+}
+
+.history-stat {
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    text-align: center;
+}
+
+.history-stat .number {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--black);
+}
+
+.history-stat .label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+}
+
+.history-table-wrapper {
+    max-width: 1280px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 24px;
+    border: 1px solid var(--line);
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,.04);
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.history-table th {
+    padding: 16px 20px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 700;
+    letter-spacing: .5px;
+    background: var(--off-white);
+    border-bottom: 1px solid var(--line);
+}
+
+.history-table td {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+}
+
+.history-table tr:hover td {
+    background: rgba(0,184,135,.02);
+}
+
+.history-table .status-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.history-table .status-badge.success { background: rgba(0,184,135,.12); color: var(--emerald); }
+.history-table .status-badge.warning { background: rgba(245,173,50,.12); color: var(--warning); }
+.history-table .status-badge.error { background: rgba(255,92,97,.12); color: var(--danger); }
+
+.history-table .investigate-btn {
+    padding: 6px 14px;
+    background: var(--black);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    transition: .2s;
+}
+
+.history-table .investigate-btn:hover {
+    background: var(--emerald-dark);
+    transform: scale(1.05);
+}
+
+.history-table .txn-id {
+    font-family: monospace;
+    font-weight: 600;
+    color: var(--black);
+}
+
+/* =========================================================
+   AI CHAT PAGE
+========================================================= */
+
+.chat-page {
+    background: var(--off-white);
+    min-height: 100vh;
+    padding: 120px 5% 60px;
+}
+
+.chat-page-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.chat-page-box {
+    background: white;
+    border-radius: 24px;
+    border: 1px solid var(--line);
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,.04);
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-page-header {
+    padding: 20px 28px;
+    background: var(--black);
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.chat-page-header .avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(0,184,135,.2);
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+}
+
+.chat-page-header .info h3 {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.chat-page-header .info .status {
+    font-size: 10px;
+    color: var(--emerald-2);
+    font-weight: 500;
+}
+
+.chat-page-messages {
+    flex: 1;
+    padding: 24px 28px;
+    overflow-y: auto;
+    background: var(--off-white);
+}
+
+.chat-page-messages::-webkit-scrollbar { width: 4px; }
+.chat-page-messages::-webkit-scrollbar-track { background: transparent; }
+.chat-page-messages::-webkit-scrollbar-thumb { background: var(--emerald); border-radius: 10px; }
+
+.chat-page-msg {
+    margin-bottom: 14px;
+    padding: 12px 18px;
+    border-radius: 14px;
+    max-width: 80%;
+    word-wrap: break-word;
+    animation: msgSlide .3s ease-out;
+}
+
+.chat-page-msg.user {
+    background: var(--black);
+    color: white;
+    margin-left: auto;
+    border-bottom-right-radius: 4px;
+}
+
+.chat-page-msg.ai {
+    background: white;
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-bottom-left-radius: 4px;
+}
+
+.chat-page-msg .time {
+    font-size: 9px;
+    opacity: .4;
+    margin-top: 4px;
+    display: block;
+}
+
+.chat-page-input {
+    padding: 16px 24px;
+    background: white;
+    border-top: 1px solid var(--line);
+    display: flex;
+    gap: 12px;
+}
+
+.chat-page-input input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    font-size: 14px;
+    outline: none;
+    transition: .2s;
+    background: var(--off-white);
+}
+
+.chat-page-input input:focus {
+    border-color: var(--emerald);
+    box-shadow: 0 0 0 4px rgba(0,184,135,.08);
+}
+
+.chat-page-input button {
+    padding: 12px 24px;
+    background: var(--black);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 13px;
+    transition: .2s;
+}
+
+.chat-page-input button:hover {
+    background: var(--emerald-dark);
+    transform: scale(1.03);
+}
+
+/* =========================================================
+   AI CHAT FLOATING BUTTON (BOTTOM RIGHT)
+========================================================= */
+
+.chat-float-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 999;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--black);
+    color: white;
+    border: 2px solid var(--emerald);
+    font-size: 28px;
+    box-shadow: 0 8px 30px rgba(0,0,0,.25), 0 0 30px rgba(0,184,135,.15);
+    cursor: pointer;
+    transition: all .3s var(--ease);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-float-btn:hover {
+    transform: scale(1.1) rotate(-5deg);
+    background: var(--emerald-dark);
+    box-shadow: 0 8px 40px rgba(0,184,135,.3), 0 0 60px rgba(0,184,135,.1);
+}
+
+.chat-float-btn .pulse-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid var(--emerald);
+    animation: pulseRing 2s ease-out infinite;
+    opacity: 0;
+}
+
+@keyframes pulseRing {
+    0% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+.chat-float-btn .pulse-ring:nth-child(2) {
+    animation-delay: 1s;
+}
+
+/* =========================================================
+   SCROLL REVEAL
+========================================================= */
+
+.reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity .8s var(--ease), transform .8s var(--ease);
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width: 1000px) {
+    .hero { grid-template-columns: 1fr; padding-top: 130px; }
+    .universe-wrapper { height: 500px; }
+    .investigation-grid { grid-template-columns: 1fr; }
+    .history-stats { grid-template-columns: repeat(2, 1fr); }
+    .evidence-grid { grid-template-columns: 1fr; }
+    .explain-header { flex-direction: column; align-items: start; }
+}
+
+@media(max-width: 650px) {
+    .nav { padding: 0 20px; }
+    .nav-links { gap: 8px; }
+    .nav-link { font-size: 9px; padding: 6px 10px; }
+    .nav-link i { display: none; }
+    .hero { padding: 120px 20px 70px; }
+    .hero h1 { font-size: 52px; letter-spacing: -4px; }
+    .hero-description { font-size: 14px; }
+    .search { flex-direction: column; align-items: stretch; }
+    .search input { padding: 14px; }
+    .trace { width: 100%; }
+    .universe-wrapper { height: 430px; }
+    .universe { width: 360px; height: 360px; }
+    .orbit.one { width: 330px; height: 330px; }
+    .orbit.two { width: 250px; height: 250px; }
+    .orbit.three { width: 180px; height: 180px; }
+    .core { width: 135px; height: 135px; }
+    .core-amount { font-size: 27px; }
+    .node { width: 75px; height: 75px; border-radius: 18px; }
+    .node-icon { font-size: 17px; }
+    .node-name { font-size: 8px; }
+    .node-gateway { left: 0; }
+    .node-bank { right: 0; }
+    .node-ledger { right: 4%; }
+    .node-risk { left: 4%; }
+    .floating-label { display: none; }
+    .story, .explain { padding: 100px 20px; }
+    .story h2, .explain-header h2 { font-size: 49px; letter-spacing: -3px; }
+    .investigation-page { padding: 100px 16px 40px; }
+    .history-page { padding: 100px 16px 40px; }
+    .chat-page { padding: 100px 16px 40px; }
+    .history-stats { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .history-stat .number { font-size: 20px; }
+    .investigation-card { padding: 20px; }
+    .search-large { flex-direction: column; }
+    .history-table { font-size: 12px; }
+    .history-table th, .history-table td { padding: 10px 12px; }
+    .chat-page-box { height: 500px; }
+    .chat-page-messages { padding: 16px; }
+    .chat-page-msg { max-width: 95%; }
+    .footer { flex-direction: column; gap: 10px; padding: 25px 20px; }
+    .chat-float-btn { width: 50px; height: 50px; font-size: 22px; bottom: 20px; right: 20px; }
+}
+
+@media(max-width: 480px) {
+    .history-stats { grid-template-columns: 1fr 1fr; }
+    .nav-link { font-size: 8px; padding: 4px 8px; }
+    .logo { font-size: 15px; }
+    .logo-mark { width: 28px; height: 28px; font-size: 14px; }
+    .history-table .status-badge { font-size: 9px; padding: 2px 8px; }
+    .chat-float-btn { width: 44px; height: 44px; font-size: 18px; bottom: 16px; right: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="noise"></div>
+
+<!-- =======================================================
+     NAV
+======================================================== -->
+
+<nav class="nav" id="nav">
+    <div class="logo" onclick="navigateTo('dashboard')">
+        <div class="logo-mark">↗</div>
+        SETTLE<span>.AI</span>
+    </div>
+
+    <div class="nav-links">
+        <div class="nav-link active" data-page="dashboard" onclick="navigateTo('dashboard')">
+            <i class="fas fa-home"></i> Dashboard
+        </div>
+        <div class="nav-link" data-page="investigation" onclick="navigateTo('investigation')">
+            <i class="fas fa-search"></i> Investigate
+        </div>
+        <div class="nav-link" data-page="history" onclick="navigateTo('history')">
+            <i class="fas fa-clock-rotate-left"></i> History
+        </div>
+        <div class="nav-link" data-page="chat" onclick="navigateTo('chat')">
+            <i class="fas fa-comment"></i> AI Chat
+        </div>
+    </div>
+</nav>
+
+<!-- =======================================================
+     AI CHAT FLOATING BUTTON (BOTTOM RIGHT)
+======================================================== -->
+
+<button class="chat-float-btn" onclick="navigateTo('chat')" aria-label="Open AI Chat">
+    <span class="pulse-ring"></span>
+    <span class="pulse-ring"></span>
+    💬
+</button>
+
+<!-- =======================================================
+     PAGE: DASHBOARD (HOMEPAGE)
+======================================================== -->
+
+<div id="page-dashboard" class="page active">
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-copy">
+            <div class="eyebrow">
+                <span class="eyebrow-line"></span>
+                TRANSACTION INTELLIGENCE
+            </div>
+
+            <h1>
+                WHERE DID
+                <span class="green">THE MONEY</span>
+                GO?
+            </h1>
+
+            <p class="hero-description">
+                Trace a transaction across gateways, banks and ledgers.
+                Find the exact point where something went wrong —
+                and let AI explain what happened.
+            </p>
+
+            <div class="search">
+                <div class="search-icon">⌕</div>
+                <input id="transactionInput" type="text" placeholder="Enter transaction ID..." value="TX0096">
+                <button class="trace" onclick="traceAndInvestigate()">TRACE TRANSACTION →</button>
+            </div>
+        </div>
+
+        <div class="universe-wrapper" id="universeWrapper">
+            <div class="floating-label one">
+                LIVE LATENCY
+                <strong>47.2 SEC</strong>
+            </div>
+            <div class="floating-label two">
+                SYSTEMS TRACED
+                <strong>04 / 04</strong>
+            </div>
+
+            <div class="universe" id="universe">
+                <div class="orbit one"></div>
+                <div class="orbit two"></div>
+                <div class="orbit three"></div>
+
+                <div class="connection a"></div>
+                <div class="connection b"></div>
+                <div class="connection c"></div>
+                <div class="connection d"></div>
+
+                <div class="core">
+                    <div class="core-label">TRANSACTION</div>
+                    <div class="core-amount">₹1,000</div>
+                    <div class="core-id">TX0096</div>
+                </div>
+
+                <div class="node node-gateway" onclick="selectNode('Gateway')">
+                    <div class="node-icon">⇄</div>
+                    <div class="node-name">GATEWAY</div>
+                    <div class="node-state">● HEALTHY</div>
+                </div>
+
+                <div class="node node-bank" onclick="selectNode('Bank')">
+                    <div class="node-icon">◇</div>
+                    <div class="node-name">BANK</div>
+                    <div class="node-state warning">● DELAYED</div>
+                </div>
+
+                <div class="node node-ledger" onclick="selectNode('Ledger')">
+                    <div class="node-icon">▣</div>
+                    <div class="node-name">LEDGER</div>
+                    <div class="node-state">● SETTLED</div>
+                </div>
+
+                <div class="node node-risk" onclick="selectNode('Risk Engine')">
+                    <div class="node-icon">◈</div>
+                    <div class="node-name">RISK ENGINE</div>
+                    <div class="node-state">● CLEAR</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="scroll-hint">
+            <span class="scroll-line"></span>
+            SCROLL TO EXPLORE
+        </div>
+    </section>
+
+    <!-- ===================================================
+         STORY SECTION (KEPT)
+    ==================================================== -->
+    <section class="story">
+        <div class="story-top reveal">
+            <div class="story-tag">FOLLOW THE TRANSACTION</div>
+            <h2>Every transaction leaves a <span>trail.</span></h2>
+            <p class="story-description">
+                Settle.AI reconstructs the complete journey of a transaction
+                from the first authorization to the final ledger entry.
+            </p>
+        </div>
+    </section>
+
+    <!-- ===================================================
+         EXPLANATION SECTION (KEPT)
+    ==================================================== -->
+    <section class="explain">
+        <div class="explain-header reveal">
+            <h2>From raw events to <span>answers.</span></h2>
+            <p>
+                Stop searching through logs manually. Settle.AI turns fragmented
+                transaction data into an explainable investigation.
+            </p>
+        </div>
+
+        <div class="evidence-grid">
+            <div class="evidence-card reveal">
+                <div class="evidence-number">01 / TRACE</div>
+                <h3>See the entire path.</h3>
+                <p>Connect transaction events across gateways, banks, risk engines and settlement ledgers.</p>
+                <div class="evidence-visual"></div>
+            </div>
+
+            <div class="evidence-card reveal">
+                <div class="evidence-number">02 / DETECT</div>
+                <h3>Find the bottleneck.</h3>
+                <p>Automatically surface unusual latency, failures, retries and system handoffs.</p>
+                <div class="evidence-visual"></div>
+            </div>
+
+            <div class="evidence-card reveal">
+                <div class="evidence-number">03 / EXPLAIN</div>
+                <h3>Understand why.</h3>
+                <p>AI turns technical events into a concise explanation that investigators can actually understand.</p>
+                <div class="evidence-visual"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================================
+         FINAL CTA (KEPT)
+    ==================================================== -->
+    <section class="final">
+        <div class="final-glow"></div>
+        <div class="final-content reveal">
+            <div class="final-small">TRANSACTION INTELLIGENCE</div>
+            <h2>Don't just know <br><span>what happened.</span></h2>
+            <button class="final-button" onclick="navigateTo('investigation')">INVESTIGATE A TRANSACTION →</button>
+        </div>
+    </section>
+
+    <!-- ===================================================
+         FOOTER
+    ==================================================== -->
+    <footer class="footer">
+        <span>SETTLE.AI © 2026</span>
+        <span>TRACE • UNDERSTAND • RESOLVE</span>
+    </footer>
+</div>
+
+<!-- =======================================================
+     PAGE: INVESTIGATION
+======================================================== -->
+
+<div id="page-investigation" class="page">
+    <div class="page-header">
+        <h1>🔍 <span>Investigate</span> Transaction</h1>
+        <p>Enter a transaction ID to trace its complete journey across all systems.</p>
+    </div>
+
+    <div class="investigation-page">
+        <div class="investigation-grid">
+            <!-- Left: Search & Flow -->
+            <div class="investigation-card">
+                <h2>
+                    <i class="fas fa-route" style="color: var(--emerald);"></i>
+                    Transaction Trace
+                    <span class="badge">LIVE</span>
+                </h2>
+
+                <div class="search-large">
+                    <input id="investigationInput" type="text" placeholder="Enter TXN ID..." value="TX0096">
+                    <button onclick="performInvestigation()">
+                        <i class="fas fa-search"></i> Investigate
+                    </button>
+                </div>
+
+                <div id="investigationResult">
+                    <div style="text-align: center; padding: 40px 20px; color: var(--muted);">
+                        <div style="font-size: 40px; margin-bottom: 16px;">🔍</div>
+                        <div>Enter a transaction ID above and click Investigate to see real results from the AI agent.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Quick Stats & Actions -->
+            <div class="investigation-card">
+                <h2>
+                    <i class="fas fa-bolt" style="color: var(--warning);"></i>
+                    Quick Actions
+                </h2>
+
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <button onclick="quickInvestigate('TX0096')" style="padding: 14px 20px; background: var(--black); color: white; border: none; border-radius: 12px; font-weight: 600; display: flex; align-items: center; gap: 12px; transition: .2s; width: 100%;">
+                        <i class="fas fa-clock-rotate-left"></i>
+                        Re-run TX0096
+                    </button>
+                    <button onclick="quickInvestigate('TX0001')" style="padding: 14px 20px; background: var(--off-white); color: var(--text); border: 2px solid var(--line); border-radius: 12px; font-weight: 600; display: flex; align-items: center; gap: 12px; transition: .2s; width: 100%;">
+                        <i class="fas fa-search"></i>
+                        Investigate TX0001
+                    </button>
+                    <button onclick="quickInvestigate('TX0002')" style="padding: 14px 20px; background: var(--off-white); color: var(--text); border: 2px solid var(--line); border-radius: 12px; font-weight: 600; display: flex; align-items: center; gap: 12px; transition: .2s; width: 100%;">
+                        <i class="fas fa-search"></i>
+                        Investigate TX0002
+                    </button>
+                </div>
+
+                <hr style="border: none; border-top: 1px solid var(--line); margin: 24px 0;">
+
+                <div style="background: var(--mint-soft); padding: 16px; border-radius: 12px;">
+                    <div style="font-weight: 600; font-size: 13px; color: var(--emerald-dark);">
+                        <i class="fas fa-lightbulb"></i> Pro Tip
+                    </div>
+                    <div style="font-size: 13px; color: var(--muted); margin-top: 4px;">
+                        Use <strong>Cmd+K</strong> to quickly focus the search bar. Try IDs like TX0001–TX0100 from your dataset.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- =======================================================
+     PAGE: HISTORY
+======================================================== -->
+
+<div id="page-history" class="page">
+    <div class="page-header">
+        <h1>📋 <span>Transaction</span> History</h1>
+        <p>View all past investigations and transaction traces.</p>
+    </div>
+
+    <div class="history-page">
+        <div class="history-stats">
+            <div class="history-stat">
+                <div class="number">247</div>
+                <div class="label">Total Traces</div>
+            </div>
+            <div class="history-stat">
+                <div class="number" style="color: var(--emerald);">198</div>
+                <div class="label">Successful</div>
+            </div>
+            <div class="history-stat">
+                <div class="number" style="color: var(--warning);">32</div>
+                <div class="label">With Issues</div>
+            </div>
+            <div class="history-stat">
+                <div class="number" style="color: var(--danger);">17</div>
+                <div class="label">Failed</div>
+            </div>
+        </div>
+
+        <div class="history-table-wrapper">
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Transaction ID</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Issue</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="txn-id">TX0096</td>
+                        <td>₹1,000</td>
+                        <td>2026-09-05 12:41</td>
+                        <td><span class="status-badge warning">Amount mismatch</span></td>
+                        <td>Ledger 950 vs gateway/bank 1000</td>
+                        <td><button class="investigate-btn" onclick="investigateFromHistory('TX0096')">Re-trace</button></td>
+                    </tr>
+                    <tr>
+                        <td class="txn-id">TX0001</td>
+                        <td>—</td>
+                        <td>2026-09-05 10:22</td>
+                        <td><span class="status-badge success">Success</span></td>
+                        <td>—</td>
+                        <td><button class="investigate-btn" onclick="investigateFromHistory('TX0001')">Re-trace</button></td>
+                    </tr>
+                    <tr>
+                        <td class="txn-id">TX0002</td>
+                        <td>—</td>
+                        <td>2026-09-04 16:08</td>
+                        <td><span class="status-badge error">Unknown</span></td>
+                        <td>—</td>
+                        <td><button class="investigate-btn" onclick="investigateFromHistory('TX0002')">Re-trace</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- =======================================================
+     PAGE: AI CHAT
+======================================================== -->
+
+<div id="page-chat" class="page">
+    <div class="page-header">
+        <h1>💬 <span>AI Chat</span> Assistant</h1>
+        <p>Ask the SettleAI assistant about transactions, issues, and investigations.</p>
+    </div>
+
+    <div class="chat-page">
+        <div class="chat-page-container">
+            <div class="chat-page-box">
+                <div class="chat-page-header">
+                    <div class="avatar">✦</div>
+                    <div class="info">
+                        <h3>SettleAI Assistant</h3>
+                        <div class="status">● Online • Ready to help</div>
+                    </div>
+                </div>
+
+                <div class="chat-page-messages" id="chatPageMessages">
+                    <div class="chat-page-msg ai">
+                        👋 Hello! I'm SettleAI Assistant.
+                        <br><br>
+                        I can help you investigate transactions, explain issues, and trace money flow.
+                        <span class="time">Just now</span>
+                    </div>
+                    <div class="chat-page-msg ai">
+                        💡 Try asking: "Why is TX0096 not settling?"
+                        <span class="time">Just now</span>
+                    </div>
+                </div>
+
+                <div class="chat-page-input">
+                    <input type="text" id="chatPageInput" placeholder="Ask about a transaction..." onkeypress="if(event.key==='Enter') sendChatPageMessage()">
+                    <button onclick="sendChatPageMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- =======================================================
+     JAVASCRIPT
+======================================================== -->
+
+<script>
+// =========================================================
+// BACKEND API CONFIG
+// =========================================================
+
+const API_URL = "http://127.0.0.1:8000/ask";
+
+// =========================================================
+// NAVIGATION - Page Switching
+// =========================================================
+
+function navigateTo(page) {
+    // Update nav links
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+    });
+    document.querySelector(`.nav-link[data-page="${page}"]`).classList.add('active');
+
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(p => {
+        p.classList.remove('active');
+    });
+
+    // Show target page
+    document.getElementById(`page-${page}`).classList.add('active');
+
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// =========================================================
+// NAV SCROLL EFFECT
+// =========================================================
+
+const nav = document.getElementById("nav");
+
+window.addEventListener("scroll", () => {
+    if (window.scrollY > 40) {
+        nav.classList.add("scrolled");
+    } else {
+        nav.classList.remove("scrolled");
+    }
+});
+
+// =========================================================
+// 3D MOUSE PARALLAX
+// =========================================================
+
+const universe = document.getElementById("universe");
+const wrapper = document.getElementById("universeWrapper");
+
+let rotateX = 0;
+let rotateY = 0;
+let zoom = 1;
+
+wrapper.addEventListener("mousemove", (event) => {
+    const rect = wrapper.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width;
+    const y = (event.clientY - rect.top) / rect.height;
+    rotateY = (x - .5) * 14;
+    rotateX = (0.5 - y) * 14;
+    updateUniverse();
+});
+
+wrapper.addEventListener("mouseleave", () => {
+    rotateX = 0;
+    rotateY = 0;
+    updateUniverse();
+});
+
+function updateUniverse() {
+    universe.style.setProperty("--rx", rotateX + "deg");
+    universe.style.setProperty("--ry", rotateY + "deg");
+    universe.style.setProperty("--zoom", zoom);
+}
+
+// =========================================================
+// TRACE & INVESTIGATE FROM DASHBOARD
+// =========================================================
+
+function traceAndInvestigate() {
+    const input = document.getElementById("transactionInput");
+    const id = input.value.trim();
+    
+    if (!id) {
+        input.focus();
+        input.style.borderColor = "#ff5c61";
+        setTimeout(() => { input.style.borderColor = ""; }, 1500);
+        return;
+    }
+    
+    // Navigate to investigation page
+    navigateTo('investigation');
+    
+    // Set the investigation input
+    document.getElementById("investigationInput").value = id;
+    
+    // Perform the investigation
+    setTimeout(() => performInvestigation(), 300);
+}
+
+// =========================================================
+// PERFORM INVESTIGATION (REAL BACKEND CALL)
+// =========================================================
+
+async function performInvestigation() {
+    const input = document.getElementById("investigationInput");
+    const id = input.value.trim() || "TX0096";
+
+    const result = document.getElementById("investigationResult");
+    result.innerHTML = `
+        <div style="text-align: center; padding: 40px 20px;">
+            <div style="font-size: 40px; margin-bottom: 16px;">🔍</div>
+            <div style="font-weight: 600; font-size: 16px;">Tracing ${id}...</div>
+            <div style="color: var(--muted); font-size: 13px; margin-top: 8px;">Asking the AI agent to investigate this transaction</div>
+            <div style="margin-top: 20px; display: flex; justify-content: center; gap: 8px;">
+                <span style="display: inline-block; width: 10px; height: 10px; background: var(--emerald); border-radius: 50%; animation: pulseDot 1s ease-in-out infinite;"></span>
+                <span style="display: inline-block; width: 10px; height: 10px; background: var(--emerald); border-radius: 50%; animation: pulseDot 1s ease-in-out infinite 0.2s;"></span>
+                <span style="display: inline-block; width: 10px; height: 10px; background: var(--emerald); border-radius: 50%; animation: pulseDot 1s ease-in-out infinite 0.4s;"></span>
+            </div>
+        </div>
+        <style>
+            @keyframes pulseDot {
+                0%, 100% { opacity: 0.3; transform: scale(0.8); }
+                50% { opacity: 1; transform: scale(1.2); }
+            }
+        </style>
+    `;
+
+    try {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ question: `Why is ${id} not settling?` })
+        });
+
+        const data = await response.json();
+
+        if (data.status === "MISSING_TRANSACTION_ID" || data.status === "ERROR") {
+            result.innerHTML = `
+                <div style="text-align: center; padding: 40px 20px;">
+                    <div style="font-size: 40px; margin-bottom: 16px;">⚠️</div>
+                    <div style="font-weight: 600; font-size: 16px;">${data.status}</div>
+                    <div style="color: var(--muted); font-size: 13px; margin-top: 8px;">${data.message}</div>
+                </div>
+            `;
+            addChatPageMessage(`⚠️ ${data.message}`);
+            return;
+        }
+
+        result.innerHTML = `
+            <div style="background: var(--off-white); padding: 16px; border-radius: 12px;">
+                <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px solid var(--line);">
+                    <span style="color: var(--muted);">Transaction ID</span>
+                    <span style="font-weight: 600; font-family: monospace;">${id}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px solid var(--line);">
+                    <span style="color: var(--muted);">Status</span>
+                    <span style="font-weight: 700; color: var(--black);">${data.status || "N/A"}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0;">
+                    <span style="color: var(--muted);">Confidence</span>
+                    <span style="font-weight: 600;">${data.confidence || "N/A"}</span>
+                </div>
+            </div>
+
+            <div style="background: rgba(0,184,135,.06); padding: 16px; border-radius: 12px; margin-top: 16px; border: 1px solid rgba(0,184,135,.12);">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 20px;">🤖</span>
+                    <div>
+                        <div style="font-weight: 600; font-size: 13px;">${data.problem || "AI Analysis"}</div>
+                        <div style="font-size: 13px; color: var(--muted); margin-top: 4px;">${data.explanation || ""}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: var(--off-white); padding: 16px; border-radius: 12px; margin-top: 16px;">
+                <div style="font-weight: 600; font-size: 13px; margin-bottom: 6px;">📌 Recommended Action</div>
+                <div style="font-size: 13px; color: var(--muted);">${data.recommended_action || "No action needed."}</div>
+            </div>
+        `;
+
+        document.querySelector('.core-id').textContent = id;
+
+        addChatPageMessage(`🔍 I investigated ${id}.\n\nStatus: ${data.status}\n${data.explanation || ""}`);
+
+    } catch (error) {
+        result.innerHTML = `
+            <div style="text-align: center; padding: 40px 20px;">
+                <div style="font-size: 40px; margin-bottom: 16px;">❌</div>
+                <div style="font-weight: 600; font-size: 16px;">Could not reach the backend</div>
+                <div style="color: var(--muted); font-size: 13px; margin-top: 8px;">Make sure your FastAPI server is running at ${API_URL}</div>
+            </div>
+        `;
+        console.error("Investigation error:", error);
+    }
+}
+
+function quickInvestigate(id) {
+    document.getElementById("investigationInput").value = id;
+    navigateTo('investigation');
+    setTimeout(() => performInvestigation(), 300);
+}
+
+function investigateFromHistory(id) {
+    quickInvestigate(id);
+}
+
+// =========================================================
+// NODE INTERACTION (still demo/cosmetic - not wired to backend)
+// =========================================================
+
+function selectNode(nodeName) {
+    const messages = {
+        "Gateway": "✅ Gateway authorization completed successfully at 12:41:08. Response time: 2.1ms.",
+        "Bank": "⚠️ Bottleneck detected. Bank processing exceeded expected latency by 47.2 seconds. Status: DELAYED",
+        "Ledger": "✅ Ledger successfully committed the transaction at 12:42:03. Settlement completed.",
+        "Risk Engine": "✅ Risk analysis completed. No blocking anomaly detected. Score: 2.4/10"
+    };
+
+    // Highlight the node
+    const nodes = document.querySelectorAll('.node');
+    nodes.forEach(n => n.style.borderColor = '');
+    
+    const target = document.querySelector(`.node-${nodeName.toLowerCase().replace(' ', '')}`);
+    if (target) {
+        target.style.borderColor = '#00d39b';
+        target.style.boxShadow = '0 0 40px rgba(0,211,155,.3)';
+        setTimeout(() => {
+            target.style.borderColor = '';
+            target.style.boxShadow = '';
+        }, 2000);
+    }
+
+    addChatPageMessage(messages[nodeName] || `${nodeName}: System status checked.`);
+}
+
+// =========================================================
+// SCROLL REVEAL
+// =========================================================
+
+const revealElements = document.querySelectorAll(".reveal");
+
+const observer = new IntersectionObserver(
+    entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+                observer.unobserve(entry.target);
+            }
+        });
+    },
+    { threshold: .15 }
+);
+
+revealElements.forEach(element => {
+    observer.observe(element);
+});
+
+// =========================================================
+// CHAT PAGE FUNCTIONS (REAL BACKEND CALL)
+// =========================================================
+
+const chatPageMessages = document.getElementById('chatPageMessages');
+
+async function sendChatPageMessage() {
+    const input = document.getElementById('chatPageInput');
+    const text = input.value.trim();
+    
+    if (!text) return;
+    
+    // Add user message
+    const userMsg = document.createElement('div');
+    userMsg.className = 'chat-page-msg user';
+    userMsg.innerHTML = text + `<span class="time">Just now</span>`;
+    chatPageMessages.appendChild(userMsg);
+    
+    input.value = '';
+    chatPageMessages.scrollTop = chatPageMessages.scrollHeight;
+
+    try {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ question: text })
+        });
+
+        const data = await response.json();
+
+        let reply;
+        if (data.status === "MISSING_TRANSACTION_ID" || data.status === "ERROR") {
+            reply = `⚠️ ${data.message}`;
+        } else {
+            reply = `🔍 Status: ${data.status}\n\n${data.problem || ""}\n\n${data.explanation || ""}\n\n📌 Recommended action: ${data.recommended_action || "N/A"}\n\nConfidence: ${data.confidence || "N/A"}`;
+        }
+        addChatPageMessage(reply);
+
+    } catch (error) {
+        addChatPageMessage("❌ Could not reach the backend. Make sure your FastAPI server is running at " + API_URL);
+        console.error("Chat error:", error);
+    }
+}
+
+function addChatPageMessage(text) {
+    const aiMsg = document.createElement('div');
+    aiMsg.className = 'chat-page-msg ai';
+    aiMsg.innerHTML = text.replace(/\n/g, '<br>') + `<span class="time">Just now</span>`;
+    chatPageMessages.appendChild(aiMsg);
+    chatPageMessages.scrollTop = chatPageMessages.scrollHeight;
+}
+
+// =========================================================
+// KEYBOARD SHORTCUTS
+// =========================================================
+
+document.addEventListener('keydown', function(e) {
+    // Cmd+K or Ctrl+K to focus search
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        const activePage = document.querySelector('.page.active');
+        if (activePage && activePage.id === 'page-dashboard') {
+            document.getElementById('transactionInput').focus();
+        } else if (activePage && activePage.id === 'page-investigation') {
+            document.getElementById('investigationInput').focus();
+        } else if (activePage && activePage.id === 'page-chat') {
+            document.getElementById('chatPageInput').focus();
+        }
+    }
+});
+
+// =========================================================
+// CONSOLE WELCOME
+// =========================================================
+
+console.log('%c✦ SETTLE.AI v2.0', 'color: #00b887; font-size: 28px; font-weight: bold;');
+console.log('%c🔍 Transaction Intelligence System', 'color: #71807b; font-size: 14px;');
+console.log('📋 Pages: Dashboard | Investigate | History | AI Chat');
+console.log('💬 Click the chat icon in the bottom right to open AI Chat');
+console.log('💡 Press Cmd+K to focus search');
+</script>
+
+</body>
+</html>
